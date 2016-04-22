@@ -1,8 +1,13 @@
 extends layout
 
 block content
-	#image-wrapper
-		img(src='images/' + carObj)
-	#vote-wrapper
-		button.btn(data-action="vote(electric)") Electric
-		button.btn(data-action="vote(not)") Not
+	div(id="app", class="text-center")
+		div(id="image-wrapper" class="text-center")
+			img(src='images/' + carObj)
+		div(id="vote-wrapper", class="row")
+			div(class="col-sm-6 col-sm-offset-3 text-center")
+				button.btn(class="btn btn-primary", data-action="vote(electric)") Electric
+				button.btn(class="btn btn-danger", data-action="vote(not)") Not
+
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+	script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS', crossorigin='anonymous')

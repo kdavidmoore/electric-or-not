@@ -1,16 +1,17 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+#app {
+	padding: 20px;
 }
 
-a {
-  color: #00B7FF;
-}
-
-div {
+#image-wrapper {
+	margin: auto;
 	height: 80vh;
 }
 
 img {
 	height: 100%;
+}
+
+button {
+	margin: 20px 10px;
+	width: 100px;
 }
