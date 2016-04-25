@@ -1,17 +1,17 @@
-#app {
-	padding: 20px;
+#image-wrapper {
+	padding-top: 20px;
+	height: 70vh;
 }
 
-#image-wrapper {
-	margin: auto;
-	height: 80vh;
+.vote-form {
+	display: inline;
+}
+
+.vote-form input {
+	margin: 20px 10px;
+	width: 100px;
 }
 
 img {
 	height: 100%;
-}
-
-button {
-	margin: 20px 10px;
-	width: 100px;
 }

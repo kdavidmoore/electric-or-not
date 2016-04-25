@@ -13,11 +13,22 @@ mongoClient.connect(mongoUrl, function(error, database){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	// return the array containing all cars
 	db.collection('cars').find({}).toArray(function(error, carResult){
-		// get a random number between 1 and 4
+		// choose a random car index between 1 and 4
 		var getRandomImage = Math.floor(Math.random() * carResult.length);
-		res.render('index', { carObj: carResult[getRandomImage].imageSrc });
+		res.render('index', { carObj: carResult[getRandomImage].imageSrc});
 	});
+});
+
+// set up the electric page
+router.post('/electric', function(req, res, next){
+	res.send(req.body);
+});
+
+// set up the not electric page
+router.post('/not', function(req, res, next){
+	res.send(req.body);
 });
 
 module.exports = router;

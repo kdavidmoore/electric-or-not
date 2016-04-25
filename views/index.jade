@@ -1,13 +1,42 @@
 extends layout
 
-block content
-	div(id="app", class="text-center")
-		div(id="image-wrapper" class="text-center")
-			img(src='images/' + carObj)
-		div(id="vote-wrapper", class="row")
-			div(class="col-sm-6 col-sm-offset-3 text-center")
-				button.btn(class="btn btn-primary", data-action="vote(electric)") Electric
-				button.btn(class="btn btn-danger", data-action="vote(not)") Not
+block navbar
+	nav(class="nav navbar-default")
+		div(class="container-fluid")
+			div(class="navbar-header")
+				button(type="button", class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar-collapse-1", aria-expanded="false")
+					span(class="sr-only") Toggle navigation
+					span(class="icon-bar")
+					span(class="icon-bar")
+					span(class="icon-bar")
+				a(class="navbar-brand", href="#") Electric or Not
+			div(class="collapse navbar-collapse", id="navbar-collapse-1")
+				ul(class="nav navbar-nav")
+					li
+						a(class="active", href="./")
+							span(class="glyphicon glyphicon-print") Vote!
+					li
+						a(class="active", href="./standings")
+							span(class="glyphicon glyphicon-sort-by-attributes-alt") Standings
+					li
+						a(class="active", href="./add")
+							span(class="glyphicon glyphicon-plus") Add Pic
+					li
+						form(class="new-user", action="./reset", method="post")
+							input(class="btn btn-default navbar-btn", type="submit", value="New User")
+					li
+						form(class="new-user", action="./reset", method="post")
+							input(class="btn btn-default navbar-btn", type="submit", value="Reset Images")
 
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
-	script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS', crossorigin='anonymous')
+block content
+	div(class="container")
+		div(class="row")
+			div(class="col-sm-12 text-center")
+				div(id="image-wrapper")
+					img(src='images/' + carObj)
+		div(class="row")
+			div(id="vote-wrapper", class="col-sm-6 col-sm-offset-3 text-center")
+				form(class="vote-form", action="./electric", method="post")
+					input(type="submit", class="btn btn-primary btn-lg", name="electric" value="Electric")
+				form(class="vote-form", action="./not", method="post")
+					input(type="submit" class="btn btn-danger btn-lg", name="not" value="Not")
