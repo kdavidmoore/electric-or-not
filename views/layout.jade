@@ -11,5 +11,31 @@ html(lang='en')
 		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS', crossorigin='anonymous')
 
 	body
-		block navbar
+		nav(class="nav navbar-default")
+			div(class="container-fluid")
+				div(class="navbar-header")
+					button(type="button", class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar-collapse-1", aria-expanded="false")
+						span(class="sr-only") Toggle navigation
+						span(class="icon-bar")
+						span(class="icon-bar")
+						span(class="icon-bar")
+					a(class="navbar-brand", href="./") Electric&nbsp;or&nbsp;Not
+				div(class="collapse navbar-collapse", id="navbar-collapse-1")
+					ul(class="nav navbar-nav")
+						li
+							a(class="active", href="./")
+								span(class="glyphicon glyphicon-print") Vote
+						li
+							a(class="active", href="./standings")
+								span(class="glyphicon glyphicon-sort-by-attributes-alt") Standings
+						li
+							a(class="active", href="./add")
+								span(class="glyphicon glyphicon-plus") Add&nbsp;photo
+						li
+							form(class="new-user", action="./reset", method="post")
+								input(class="btn btn-default navbar-btn", type="submit", name="newUser" value="New User")
+						li
+							form(class="new-user", action="./reset", method="post")
+								input(class="btn btn-default navbar-btn", type="submit", name="reset", value="Reset Images")
+		
 		block content

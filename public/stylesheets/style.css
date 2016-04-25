@@ -3,15 +3,19 @@
 	height: 70vh;
 }
 
+img {
+	height: 100%;
+}
+
 .vote-form {
 	display: inline;
 }
 
 .vote-form input {
-	margin: 20px 10px;
+	margin: 10px;
 	width: 100px;
 }
 
-img {
-	height: 100%;
+.navbar-btn {
+	margin-right: 10px;
 }
