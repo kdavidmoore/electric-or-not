@@ -147,4 +147,11 @@ router.get('/standings', function(req, res, next){
 	}); // end query to 'cars' collection
 });
 
+
+router.post('/reset', function(req, res, next){
+	db.collection('cars').update({}, {$unset: {"totalVotes": ""}}, {multi: true});
+	db.collection('users').drop();
+	res.redirect('/');
+});
+
 module.exports = router;

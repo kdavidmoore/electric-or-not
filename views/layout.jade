@@ -34,10 +34,10 @@ html(lang='en')
 							a(class="active", href="./add")
 								span(class="glyphicon glyphicon-plus") Add&nbsp;photo
 						li
-							form(class="new-user", action="./reset", method="post")
-								input(class="btn btn-default navbar-btn", type="submit", name="newUser" value="New User")
+							form(class="new-user", action="./new", method="post")
+								input(class="btn btn-default navbar-btn", type="submit", value="New User")
 						li
 							form(class="new-user", action="./reset", method="post")
-								input(class="btn btn-default navbar-btn", type="submit", name="reset", value="Reset Images")
+								input(class="btn btn-default navbar-btn", type="submit", value="Reset Images")
 		
 		block content
