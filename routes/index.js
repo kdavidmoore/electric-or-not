@@ -7,6 +7,7 @@ var mongoUrl = process.env.MONGOLAB_URI ||
 				'mongodb://localhost:27017/electric';
 var db;
 var allCars;
+var photosToShow;
 
 // create a connection with mongo
 mongoClient.connect(mongoUrl, function(error, database){
@@ -22,18 +23,28 @@ mongoClient.connect(mongoUrl, function(error, database){
 router.get('/', function(req, res, next) {
 	// get the current user
 	var currIP = req.ip;
-	db.collection('users').find({id: currIP}).toArray(function(error, userResult){
-		if (userResult.length === 0) {
-			photosToShow = allCars;
-		} else if (userResult.length === allCars.length) {
-			// if the user has voted on all images, encourage them to add more cars, etc.
-			photosToShow = allCars;
+	db.collection('users').find({ip: currIP}).toArray(function(error, userResult){
+		// make sure photosToShow is initialized
+		photosToShow = allCars;
+		// just show the cars that don't have a totalVotes field
+		if (userResult.length > 0){
+			db.collection('cars').find({ totalVotes: { $exists: false } }).toArray(function(error, results){
+			console.log(results);
+				if (results.length > 0) {
+					photosToShow = results;
+					console.log('=======================');
+					console.log('showing partial results');
+					console.log('=======================');
+					var randomPhoto = Math.floor(Math.random() * photosToShow.length);
+					res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
+				} else {
+					return "all photos have been voted on";
+				}
+			});
 		} else {
-			// otherwise just show the cars that don't have a totalVotes key
-			photosToShow = allCars;
+			var randomPhoto = Math.floor(Math.random() * photosToShow.length);
+			res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
 		}
-		var randomPhoto = Math.floor(Math.random() * photosToShow.length);
-		res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
 	});
 });
 
@@ -46,7 +57,7 @@ router.post('/electric', function(req, res, next){
 		},
 		{
 			$inc: {"totalVotes": 1}
-		}, function(error, results){console.log(results);}
+		}, function(error, results){console.log(error);}
 	);
 
 	// update the users collection to include the photo voted on, the vote, and the IP address of the user
@@ -55,7 +66,7 @@ router.post('/electric', function(req, res, next){
 			ip: req.ip,
 			"car": req.body.car,
 			"vote": "electric"
-		}, function(error, results){console.log(results);}
+		}, function(error, results){console.log(error);}
 	);
 
 	// redirect to the home page when done updating tables
@@ -70,7 +81,7 @@ router.post('/not', function(req, res, next){
 		},
 		{
 			$inc: {"totalVotes": 1}
-		}, function(error, results){console.log(results);}
+		}, function(error, results){console.log(error);}
 	);
 
 	// update the users collection to include the photo voted on, the vote, and the IP address of the user
@@ -79,7 +90,7 @@ router.post('/not', function(req, res, next){
 			ip: req.ip,
 			"car": req.body.car,
 			"vote": "not"
-		}, function(error, results){console.log(results);}
+		}, function(error, results){console.log(error);}
 	);
 
 	// redirect to the home page when done updating tables
