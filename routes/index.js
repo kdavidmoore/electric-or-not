@@ -42,58 +42,48 @@ router.post('/electric', function(req, res, next){
 	// update the images (cars) collection by 1
 	db.collection('cars').updateOne(
 		{
-			name: req.body.name
+			name: req.body.car
 		},
 		{
 			$inc: {"totalVotes": 1}
 		}, function(error, results){console.log(results);}
 	);
 
-	// update the user's collection to include the IP address and photo they voted on
-	db.collection('users').updateOne(
+	// update the users collection to include the photo voted on, the vote, and the IP address of the user
+	db.collection('users').insert(
 		{
-			ip: req.ip
-		},
-		{
-			$set: {"photo": req.body.name, "vote": "electric"}
-		},
-		{
-			upsert: true
-		},
-		function(error, results){console.log(results);}
+			ip: req.ip,
+			"car": req.body.car,
+			"vote": "electric"
+		}, function(error, results){console.log(results);}
 	);
 
 	// redirect to the home page when done updating tables
-	return res.redirect('/');
+	res.redirect('/');
 });
 
 router.post('/not', function(req, res, next){
 	// update the images (cars) collection by 1
 	db.collection('cars').updateOne(
 		{
-			name: req.body.name
+			name: req.body.car
 		},
 		{
 			$inc: {"totalVotes": 1}
 		}, function(error, results){console.log(results);}
 	);
 
-	// update the user's collection to include the IP address and photo they voted on
-	db.collection('users').updateOne(
+	// update the users collection to include the photo voted on, the vote, and the IP address of the user
+	db.collection('users').insert(
 		{
-			ip: req.ip
-		},
-		{
-			$set: {"photo": req.body.name, "vote": "not"}
-		},
-		{
-			upsert: true
-		},
-		function(error, results){console.log(results);}
+			ip: req.ip,
+			"car": req.body.car,
+			"vote": "not"
+		}, function(error, results){console.log(results);}
 	);
 
 	// redirect to the home page when done updating tables
-	return res.redirect('/');
+	res.redirect('/');
 });
 
 module.exports = router;
