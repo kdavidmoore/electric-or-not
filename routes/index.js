@@ -6,45 +6,82 @@ var mongoUrl = process.env.MONGOLAB_URI ||
 				process.env.MONGOHQ_URL ||
 				'mongodb://localhost:27017/electric';
 var db;
-var allCars;
-var photosToShow;
 
 // create a connection with mongo
 mongoClient.connect(mongoUrl, function(error, database){
-	// get all cars and put them in an array
-	database.collection('cars').find({}).toArray(function(error, result){
-		allCars = result;
-		db = database;
-	});
+	db = database;
 });
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	var allCars;
+	// get all cars and put them in an array
+	db.collection('cars').find().toArray(function(error, results){
+		allCars = results;
+	});
+
 	// get the current user
 	var currIP = req.ip;
-	db.collection('users').find({ip: currIP}).toArray(function(error, userResult){
-		// initialize photosToShow (will stay this value unless there are vote records available)
-		photosToShow = allCars;
-		// just show the cars that don't have a totalVotes field
-		if (userResult.length > 0){
-			db.collection('cars').find({ totalVotes: { $exists: false } }).toArray(function(error, results){
+
+	db.collection('users').find({ip: currIP}).toArray(function(error, userResults){
+		//NEW VERSION
+		var photosToShow;
+		var carsVoted = [];
+		if (userResults.length > 0){
+			for (var i=0; i<userResults.length; i++){
+				// push the names of all cars voted on by the curent user
+				carsVoted.push(userResults[i].car);
+			}
+
+			db.collection('cars').find({name: {$nin: carsVoted}}).toArray(function(err, results){
 				if (results.length > 0) {
-					// set the value of photosToShow to the current query results
 					photosToShow = results;
-					console.log("==============");
-					console.log(results);
-					console.log("==============");
 					var randomPhoto = Math.floor(Math.random() * photosToShow.length);
+					console.log("================================");
+					console.log("showing the photos not voted on");
+					console.log("================================");
 					res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
 				} else {
-					return "all photos have been voted on";
+					console.log("=========================");
+					console.log("redirecting to standings");
+					console.log("=========================");
+					res.redirect('/standings');
 				}
-			}); // end query to 'cars' collection
+			});
 		} else {
-			var randomPhoto = Math.floor(Math.random() * photosToShow.length);
-			res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
+			// if the current user has not voted, show all photos
+			console.log("===================");
+			console.log("showing all photos");
+			console.log("===================");
+			var randomPhoto = Math.floor(Math.random() * allCars.length);
+			res.render('index', { carName: allCars[randomPhoto].name, carImg: allCars[randomPhoto].src});
 		}
+
+		// // OLD VERSION
+		// // initialize photosToShow (will stay this value unless there are vote records available)
+		// photosToShow = allCars;
+		// // just show the cars that haven't been voted on
+		// if (userResult.length > 0){
+		// 	db.collection('cars').find({ totalVotes: { $exists: false } }).toArray(function(error, results){
+		// 		if (results.length > 0) {
+		// 			// set the value of photosToShow to the current query results
+		// 			photosToShow = results;
+		// 			console.log("==============");
+		// 			console.log(results);
+		// 			console.log("==============");
+		// 			var randomPhoto = Math.floor(Math.random() * photosToShow.length);
+		// 			res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
+		// 		} else {
+		// 			// no more photos to vote on
+		// 			res.redirect('/standings');
+		// 		}
+		// 	}); // end query to 'cars' collection
+		// } else {
+		// 	var randomPhoto = Math.floor(Math.random() * photosToShow.length);
+		// 	res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
+		// }
+
 	}); // end query to 'users' collection
 });
 
