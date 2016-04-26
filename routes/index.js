@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
 var mongoClient = mongo.MongoClient;
-var mongoUrl = process.env.MONGOLAB_URI ||
+var mongoUrl = process.env.MONGODB_URI ||
 				process.env.MONGOHQ_URL ||
 				'mongodb://localhost:27017/electric';
 var db;
