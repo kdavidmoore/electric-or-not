@@ -140,7 +140,7 @@ router.get('/standings', function(req, res, next){
 	db.collection('cars').find().toArray(function(error, results){
 		// sort photos by total votes
 		results.sort(function(a, b){
-			return (b.totalVotes - a.totalVotes);
+			return (a.totalVotes - b.totalVotes);
 		});
 		console.log(results);
 		res.render('standings', { standings: results });
