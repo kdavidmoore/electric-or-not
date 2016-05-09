@@ -15,11 +15,9 @@ This is a single page app that allows the user to vote on images and view total 
 
 ## Installation Instructions
 First clone the repo into a new directory:
-```git clone https://github.com/kdavidmoore/electric-or-not electric-app
-```
+`git clone https://github.com/kdavidmoore/electric-or-not electric-app`
 
 Then change directories and install npm dependencies:
-```cd electric-app && npm install
-```
+`cd electric-app && npm install`
 
 [I learned this at DigitalCrafts](https://digitalcrafts.com)
