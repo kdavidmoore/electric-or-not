@@ -5,6 +5,7 @@
 This is a single page app that allows the user to vote on images and view total votes. It creates votes associated with a particular IP address by performing CRUD operations on a MongoDB database.
 
 ## Features
+* Renders HTML using Jade templating engine for Node
 * Vote on photos and store votes in a MongoDB database
 * New votes creates a new document under the users collection
 * New votes also updates the totalVotes field for a given document under the cars collection
@@ -19,5 +20,11 @@ First clone the repo into a new directory:
 
 Then change directories and install npm dependencies:
 `cd electric-app && npm install`
+
+Run nodemon:
+`nodemon`
+
+Finally, open up a browser window pointing to:
+`localhost:3060`
 
 [I learned this at DigitalCrafts](https://digitalcrafts.com)
