@@ -8,7 +8,4 @@ block content
 					div(class="thumbnail standings-gallery")
 						img(src="images/" + standings[i].src)
 						div(class="caption")
-							if (standings[i].totalVotes == undefined || standings[i].totalVotes == null)
-								p= "No votes"
-							else
-								p= "Rating: " + standings[i].totalVotes
+							p= "Rating: " + standings[i].totalVotes

@@ -7,6 +7,19 @@ var mongoUrl = process.env.MONGODB_URI ||
 				'mongodb://localhost:27017/electric';
 var db;
 
+// include mongoose schemas
+// var configModule = require('../config/keys');
+// var Car = require('../models/cars');
+// var User = require('../models/users');
+// var mongoose = require('mongoose');
+// mongoose.connect(mongoUrl);
+
+// include multer stuff
+// var multer = require('multer');
+// var fs = require('fs');
+// var upload = multer({dest: 'uploads/'});
+// var type = upload.single('uploadedFile');
+
 // create a connection with mongo
 mongoClient.connect(mongoUrl, function(error, database){
 	db = database;
@@ -25,7 +38,6 @@ router.get('/', function(req, res, next) {
 	var currIP = req.ip;
 
 	db.collection('users').find({ip: currIP}).toArray(function(error, userResults){
-		//NEW VERSION
 		var photosToShow;
 		var carsVoted = [];
 		if (userResults.length > 0){
@@ -57,31 +69,6 @@ router.get('/', function(req, res, next) {
 			var randomPhoto = Math.floor(Math.random() * allCars.length);
 			res.render('index', { carName: allCars[randomPhoto].name, carImg: allCars[randomPhoto].src});
 		}
-
-		// // OLD VERSION
-		// // initialize photosToShow (will stay this value unless there are vote records available)
-		// photosToShow = allCars;
-		// // just show the cars that haven't been voted on
-		// if (userResult.length > 0){
-		// 	db.collection('cars').find({ totalVotes: { $exists: false } }).toArray(function(error, results){
-		// 		if (results.length > 0) {
-		// 			// set the value of photosToShow to the current query results
-		// 			photosToShow = results;
-		// 			console.log("==============");
-		// 			console.log(results);
-		// 			console.log("==============");
-		// 			var randomPhoto = Math.floor(Math.random() * photosToShow.length);
-		// 			res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
-		// 		} else {
-		// 			// no more photos to vote on
-		// 			res.redirect('/standings');
-		// 		}
-		// 	}); // end query to 'cars' collection
-		// } else {
-		// 	var randomPhoto = Math.floor(Math.random() * photosToShow.length);
-		// 	res.render('index', { carName: photosToShow[randomPhoto].name, carImg: photosToShow[randomPhoto].src});
-		// }
-
 	}); // end query to 'users' collection
 });
 
@@ -149,7 +136,7 @@ router.get('/standings', function(req, res, next){
 
 
 router.post('/reset', function(req, res, next){
-	db.collection('cars').update({}, {$unset: {"totalVotes": ""}}, {multi: true});
+	db.collection('cars').update({}, {$set: {"totalVotes": 0}}, {multi: true});
 	db.collection('users').drop();
 	res.redirect('/');
 });
