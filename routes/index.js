@@ -94,7 +94,7 @@ router.post('/addphoto', type, function(req, res, next){
 		{
 			name: req.body.carName,
 			src: req.file.originalname,
-			vote: "0"
+			totalVotes: 0
 		}, function(error, results){
 			if (error) throw error;
 	});
