@@ -92,9 +92,9 @@ router.post('/addphoto', type, function(req, res, next){
 
 	db.collection('cars').insert(
 		{
-			name: req.body.name,
+			name: req.body.carName,
 			src: req.file.originalname,
-			vote: ""
+			vote: "0"
 		}, function(error, results){
 			if (error) throw error;
 	});
