@@ -2,9 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
 var mongoClient = mongo.MongoClient;
-var mongoUrl = process.env.MONGODB_URI ||
-				process.env.MONGOHQ_URL ||
-				'mongodb://localhost:27017/electric';
+var mongoUrl = 'mongodb://localhost:27017/electric';
 var db;
 
 // include mongoose schemas
@@ -14,11 +12,11 @@ var db;
 // var mongoose = require('mongoose');
 // mongoose.connect(mongoUrl);
 
-// include multer stuff
-// var multer = require('multer');
-// var fs = require('fs');
-// var upload = multer({dest: 'uploads/'});
-// var type = upload.single('uploadedFile');
+//include multer stuff
+var multer = require('multer');
+var fs = require('fs');
+var upload = multer({dest: 'uploads/'});
+var type = upload.single('uploadedFile');
 
 // create a connection with mongo
 mongoClient.connect(mongoUrl, function(error, database){
@@ -70,6 +68,35 @@ router.get('/', function(req, res, next) {
 			res.render('index', { carName: allCars[randomPhoto].name, carImg: allCars[randomPhoto].src});
 		}
 	}); // end query to 'users' collection
+});
+
+
+router.get('/uploads', function(req, res, next){
+	res.render('uploads', {});
+});
+
+
+router.post('/addphoto', type, function(req, res, next){
+	var targetPath = 'public/images/' + req.file.originalname;
+	fs.readFile(req.file.path, function(error, data){
+		fs.writeFile(targetPath, data, function(error){
+			if(error){
+				res.json('Error: ' + error);
+			} else {
+				// add a 'success' message here
+
+				res.redirect('/');
+			}
+		});
+	});
+
+	db.collection('cars').insert(
+		{
+			name: req.body.name,
+			src: req.file.originalname
+		}, function(error, results){
+			if (error) throw error;
+	});
 });
 
 
@@ -129,16 +156,16 @@ router.get('/standings', function(req, res, next){
 		results.sort(function(a, b){
 			return (a.totalVotes - b.totalVotes);
 		});
-		console.log(results);
+		results.reverse();
 		res.render('standings', { standings: results });
 	}); // end query to 'cars' collection
 });
 
 
 router.post('/reset', function(req, res, next){
-	db.collection('cars').update({}, {$set: {"totalVotes": 0}}, {multi: true});
-	db.collection('users').drop();
-	res.redirect('/');
+	var currIP = req.ip;
+	console.log(currIP);
+	db.collection('users').remove({ip: currIP});
 });
 
 module.exports = router;

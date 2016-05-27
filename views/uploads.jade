@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	div(class="container")
+		div(class="row")
+			div(class="col-sm-6 col-sm-offset-3")
+				form(class="new-photo-form" action="./addphoto" method="post" enctype="multipart/form-data")
+					div(class="form-group")
+						label(for="uploadBtn") Upload a new photo
+						input(type="file" id="uploadBtn" class="form-control" name="uploadedFile" required)
+
+					div(class="form-group")
+						label(for="nameField") Name the car
+						p
+							input(type="text" class="form-control" id="nameField" name="carName" required)
+							input(type="submit" class="btn btn-primary" value="Submit")
