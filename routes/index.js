@@ -78,25 +78,26 @@ router.get('/uploads', function(req, res, next){
 
 router.post('/addphoto', type, function(req, res, next){
 	var targetPath = 'public/images/' + req.file.originalname;
+
 	fs.readFile(req.file.path, function(error, data){
+		
 		fs.writeFile(targetPath, data, function(error){
+			
 			if(error){
 				res.json('Error: ' + error);
 			} else {
-				// add a 'success' message here
-
-				res.redirect('/');
+				// if the upload is successful, add a new collection to the database
+				db.collection('cars').insert(
+				{
+					name: req.body.carName,
+					src: req.file.originalname,
+					totalVotes: 0
+				}, function(error, results){
+					if (error) throw error;
+					else res.redirect('/');
+				});
 			}
 		});
-	});
-
-	db.collection('cars').insert(
-		{
-			name: req.body.carName,
-			src: req.file.originalname,
-			totalVotes: 0
-		}, function(error, results){
-			if (error) throw error;
 	});
 });
 
