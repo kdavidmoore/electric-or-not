@@ -93,7 +93,8 @@ router.post('/addphoto', type, function(req, res, next){
 	db.collection('cars').insert(
 		{
 			name: req.body.name,
-			src: req.file.originalname
+			src: req.file.originalname,
+			vote: ""
 		}, function(error, results){
 			if (error) throw error;
 	});
@@ -166,6 +167,7 @@ router.post('/reset', function(req, res, next){
 	var currIP = req.ip;
 	console.log(currIP);
 	db.collection('users').remove({ip: currIP});
+	res.redirect('/');
 });
 
 module.exports = router;
